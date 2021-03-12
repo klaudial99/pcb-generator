@@ -1,3 +1,5 @@
+from numpy import average
+
 from Generator import Generator
 from Individual import Individual
 from PCB import PCB
@@ -49,13 +51,19 @@ if __name__ == '__main__':
     for ind in pop.individuals:
         gen = Generator(ind)
         gen.generate_random_paths()
-        ind.print_paths()
+        #ind.print_paths()
         ind.count_crosses()
 
     counter = 0
+    fitness = []
     for ind in pop.individuals:
-        counter += 1
-        print("INDIVIDUAL " + str(counter) + ": " + str(ind.count_fitness()))
+        fitness.append(ind.count_fitness())
+
+    for x in range(len(fitness)):
+        print("INDIVIDUAL " + str(x+1) + ": " + str(fitness[x]))
+
+    print("AVERAGE: " + str(average(fitness)))
+
 
 
 
