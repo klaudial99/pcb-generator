@@ -1,8 +1,4 @@
-from numpy import average
-
-from Generator import Generator
 from Individual import Individual
-from PCB import PCB
 
 
 class Population:
@@ -38,35 +34,3 @@ class Population:
     @individuals.setter
     def individuals(self, individuals_list):
         self.__individuals = individuals_list
-
-
-if __name__ == '__main__':
-
-    pcb = PCB()
-    pcb.read_from_file("D:/studia/6. sem/Sztuczna inteligencja i inżynieria wiedzy/Laborki/lista1/zad0.txt")
-    print(pcb)
-    print("---------------------")
-
-    pop = Population(10, pcb)
-    for ind in pop.individuals:
-        gen = Generator(ind)
-        gen.generate_random_paths()
-        #ind.print_paths()
-        ind.count_crosses()
-
-    counter = 0
-    fitness = []
-    for ind in pop.individuals:
-        fitness.append(ind.count_fitness())
-
-    for x in range(len(fitness)):
-        print("INDIVIDUAL " + str(x+1) + ": " + str(fitness[x]))
-
-    print("AVERAGE: " + str(average(fitness)))
-
-
-
-
-
-
-

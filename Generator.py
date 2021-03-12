@@ -64,7 +64,7 @@ class Generator:
             last_direction = 0
             last_point = actual_point
             i = 0
-            while actual_point != end_point:  # dopóki nie dojdziemy do mety
+            while actual_point != end_point:  # until reach end point
                 i += 1
                 direction = 0
 
@@ -75,7 +75,7 @@ class Generator:
 
                 if direction != last_direction and last_direction != 0:  # if direction changes
                     single_path.add_segment(Segment(last_point, direction, actual_point, 1))  # add new segment
-                else:  # update cureent segment
+                else:  # update current segment
                     edit_segment = single_path.segments[-1]
                     edit_segment.set_end_point(actual_point)
                     edit_segment.length += 1

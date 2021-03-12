@@ -39,7 +39,7 @@ class PCB:
 
     def check_point_on_board(self, point):
         if isinstance(point, Point):
-            return 0 <= point.x < self.width and 0 <= point.y < self.height
+            return 0 <= point.x <= self.width and 0 <= point.y <= self.height
 
     def read_from_file(self, path):
         try:
