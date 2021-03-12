@@ -39,7 +39,6 @@ class PCB:
 
     def check_point_on_board(self, point):
         if isinstance(point, Point):
-
             return 0 <= point.x < self.width and 0 <= point.y < self.height
 
     def read_from_file(self, path):
@@ -67,9 +66,6 @@ class PCB:
         return "WIDTH: " + str(self.width) + "\nHEIGHT: " + str(self.height) + "\nLINKS: " + str(self.board_links)
 
 
-if __name__ == '__main__':
-    pcb = PCB()
-    pcb.read_from_file("D:/studia/6. sem/Sztuczna inteligencja i inżynieria wiedzy/Laborki/lista1/zad0.txt")
-    print(pcb)
+
 
 

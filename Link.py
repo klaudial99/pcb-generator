@@ -28,4 +28,4 @@ class Link:
             return False
 
     def __repr__(self):
-        return str(self.start_point) + " - " + str(self.end_point)
+        return str(self.start_point) + " -> " + str(self.end_point)
