@@ -62,7 +62,8 @@ class Fitness:
 
         self.crosses = counter
 
-    def count_fitness(self, length_weight=2, segments_weight=1, cross_weight=5):
+    def count_fitness(self, length_weight=2, segments_weight=1, cross_weight=50):
+        self.count_crosses()
         return self.segments_amount*segments_weight + self.full_length*length_weight + self.crosses*cross_weight
 
     def get_info(self):

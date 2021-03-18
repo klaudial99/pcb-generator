@@ -7,6 +7,7 @@ from Fitness import Fitness
 from Generator import Generator
 from PCB import PCB
 from Population import Population
+import Operators as op
 
 
 class PCBPrinter:
@@ -36,7 +37,7 @@ class PCBPrinter:
         # FRAME
         x_frame = np.array([0, 0, self.pcb.width, self.pcb.width, 0])
         y_frame = np.array([0, self.pcb.height, self.pcb.height, 0, 0])
-        plt.plot(x_frame, y_frame)
+        plt.plot(x_frame, y_frame, linestyle='dashed')
 
         # TITLE
         title_font = {'family': 'serif', 'size': 16}
@@ -78,19 +79,18 @@ if __name__ == '__main__':
     print("---------------------")
 
     # GENERATE POPULATION
-    pop = Population(3, pcb)
+    pop = Population(100, pcb)
 
     for ind in pop.individuals:
         gen = Generator(ind)
         gen.generate_random_paths()
-        #ind.print_paths()
+        # ind.print_paths()
 
     # CHECK POPULATION FITNESS
     fitness = []
     individual_info = {}
     for x in range(len(pop.individuals)):
         fit = Fitness(pop.individuals[x])
-        fit.count_crosses()
         individual_info[x] = fit.get_info()
         fitness.append(fit.count_fitness())
 
@@ -104,3 +104,6 @@ if __name__ == '__main__':
     # MATLIBPLOT
     printer = PCBPrinter(pop)
     printer.draw_plot(index_best, individual_info, fitness)
+
+    op.selection_tournament(pop, 20)
+    op.selection_roulette(pop)
