@@ -1,6 +1,8 @@
 import random
 from Point import Point
 from Segment import Segment
+import random
+import AlgorithmParameters as ap
 
 directions = {"NONE": 0,
               "UP": 1,
@@ -43,6 +45,20 @@ def move(start_point, direction):
         return Point(start_point.x - 1, start_point.y)
 
 
+def proper_direction(path, actual_point, prev_direction):
+    if prev_direction == 1 or prev_direction == 3:
+        if path.link.end_point.x > actual_point.x:
+            return 2
+        else:
+            return 4
+    else:
+        if path.link.end_point.y > actual_point.y:
+            return 1
+        else:
+            return 3
+
+
+
 class Generator:
 
     def __init__(self, individual):
@@ -68,10 +84,17 @@ class Generator:
                 i += 1
                 direction = 0
 
-                while not (valid_direction(direction, last_direction) and self.individual.pcb.check_point_on_board(actual_point)): #NAND
-                    # until direction is valid (dont go back) and point is on a board
-                    direction = random_direction()
-                    actual_point = move(last_point, direction)  # nearby point
+                random_number = random.randint(0, 100)
+                if random_number < ap.PROPER_DIRECTION_PROBABILITY:
+                    direction = proper_direction(single_path, last_point, last_direction)
+                    actual_point = move(last_point, direction)
+                    print("jestem tu")
+                else:
+                    while not (valid_direction(direction, last_direction) and self.individual.pcb.check_point_on_board(actual_point)): #NAND
+                        # until direction is valid (dont go back) and point is on a board
+                        direction = random_direction()
+                        actual_point = move(last_point, direction)  # nearby point
+                        print("albo tu")
 
                 if direction != last_direction and last_direction != 0:  # if direction changes
                     single_path.add_segment(Segment(last_point, direction, actual_point, 1))  # add new segment
@@ -84,7 +107,6 @@ class Generator:
                         edit_segment.direction = direction
                     single_path.set_last_segment(edit_segment)
 
-                single_path.add_visited_point(actual_point)
                 last_direction = direction
                 last_point = actual_point
             #print("ALL: " + str(i))

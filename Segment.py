@@ -47,6 +47,92 @@ class Segment:
         if isinstance(point, Point):
             self.end_point = point
 
+    def lengthen_segment(self):
+        # określanie nowego punktu końcowego
+        if self.direction == 1:
+            #self.end_point.y += 1
+            self.end_point = Point(self.end_point.x, self.end_point.y+1)
+        elif self.direction == 2:
+            #self.end_point.x += 1
+            self.end_point = Point(self.end_point.x+1, self.end_point.y)
+        elif self.direction == 3:
+            #self.end_point.y -= 1
+            self.end_point = Point(self.end_point.x, self.end_point.y - 1)
+        elif self.direction == 4:
+            #self.end_point.x -= 1
+            self.end_point = Point(self.end_point.x-1, self.end_point.y)
+        self.length += 1
+
+
+    def shorten_segment(self):
+        # określanie nowego punktu końcowego
+        if self.direction == 1:
+            self.end_point = Point(self.end_point.x, self.end_point.y - 1)
+        elif self.direction == 2:
+            self.end_point = Point(self.end_point.x-1, self.end_point.y)
+        elif self.direction == 3:
+            self.end_point = Point(self.end_point.x, self.end_point.y + 1)
+        elif self.direction == 4:
+            self.end_point = Point(self.end_point.x+1, self.end_point.y)
+
+        self.length -= 1
+
+    def lengthen_segment_back(self):
+        # określanie nowego punktu początkowego
+        if self.direction == 1:
+            self.start_point = Point(self.start_point.x, self.start_point.y - 1)
+        elif self.direction == 2:
+            self.start_point = Point(self.start_point.x-1, self.start_point.y)
+        elif self.direction == 3:
+            self.start_point = Point(self.start_point.x, self.start_point.y + 1)
+        elif self.direction == 4:
+            self.start_point = Point(self.start_point.x+1, self.start_point.y)
+
+        self.length += 1
+
+    def shorten_segment_back(self):
+        # określanie nowego punktu początkowego
+        if self.direction == 1:
+            self.start_point = Point(self.start_point.x, self.start_point.y + 1)
+        elif self.direction == 2:
+            self.start_point = Point(self.start_point.x+1, self.start_point.y)
+        elif self.direction == 3:
+            self.start_point = Point(self.start_point.x, self.start_point.y - 1)
+        elif self.direction == 4:
+            self.start_point = Point(self.start_point.x-1, self.start_point.y)
+
+        self.length -= 1
+
+    def move_segment_lengthening(self, prev_segment):
+        # określenie kierunku przesunięcia
+        if prev_segment.direction == 1:
+            self.start_point = Point(self.start_point.x, self.start_point.y+1)
+            self.end_point = Point(self.end_point.x, self.end_point.y+1)
+        elif prev_segment.direction == 2:
+            self.start_point = Point(self.start_point.x+1, self.start_point.y)
+            self.end_point = Point(self.end_point.x+1, self.end_point.y)
+        elif prev_segment.direction == 3:
+            self.start_point = Point(self.start_point.x, self.start_point.y-1)
+            self.end_point = Point(self.end_point.x, self.end_point.y-1)
+        elif prev_segment.direction == 4:
+            self.start_point = Point(self.start_point.x-1, self.start_point.y)
+            self.end_point = Point(self.end_point.x-1, self.end_point.y)
+
+    def move_segment_shortening(self, prev_segment):
+        # określenie kierunku przesunięcia
+        if prev_segment.direction == 1:
+            self.start_point = Point(self.start_point.x, self.start_point.y - 1)
+            self.end_point = Point(self.end_point.x, self.end_point.y - 1)
+        elif prev_segment.direction == 2:
+            self.start_point = Point(self.start_point.x - 1, self.start_point.y)
+            self.end_point = Point(self.end_point.x - 1, self.end_point.y)
+        elif prev_segment.direction == 3:
+            self.start_point = Point(self.start_point.x, self.start_point.y + 1)
+            self.end_point = Point(self.end_point.x, self.end_point.y + 1)
+        elif prev_segment.direction == 4:
+            self.start_point = Point(self.start_point.x + 1, self.start_point.y)
+            self.end_point = Point(self.end_point.x + 1, self.end_point.y)
+
     def __repr__(self):
         return str(self.start_point) + " " + str(self.direction) + " " + str(self.length)
 

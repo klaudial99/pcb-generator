@@ -1,3 +1,14 @@
+import AlgorithmParameters as ap
+from Point import Point
+
+
+def increase_visits(point, dictionary):
+    if str(point) in dictionary.keys():
+        dictionary[str(point)] = dictionary[str(point)] + 1
+    else:
+        dictionary[str(point)] = 1
+
+
 class Fitness:
 
     def __init__(self, individual):
@@ -6,13 +17,14 @@ class Fitness:
 
         for path in individual.paths:
             segments_amount += len(path.segments)
-            full_length += len(path.visited_points)
-        full_length -= len(individual.paths)
+            for seg in path.segments:
+                full_length += seg.length
 
         self.__individual = individual
         self.__segments_amount = segments_amount
         self.__full_length = full_length
         self.__crosses = 0
+        self.count_crosses()
 
     @property
     def individual(self):
@@ -49,11 +61,29 @@ class Fitness:
     def count_crosses(self):
         points_dict = {}
         for path in self.individual.paths:
-            for point in path.visited_points:
-                if str(point) in points_dict.keys():
-                    points_dict[str(point)] = points_dict[str(point)] + 1
-                else:
-                    points_dict[str(point)] = 1
+            for seg in path.segments:
+                increase_visits(seg.start_point, points_dict)
+                if seg.length > 1:
+                    last_point = seg.start_point
+                    for x in range(seg.length-1):
+
+                        if seg.direction == 1:
+                            p = Point(last_point.x, last_point.y+1)
+                            increase_visits(p, points_dict)
+                            last_point = p
+                        elif seg.direction == 2:
+                            p = Point(last_point.x+1, last_point.y)
+                            increase_visits(p, points_dict)
+                            last_point = p
+                        elif seg.direction == 3:
+                            p = Point(last_point.x, last_point.y-1)
+                            increase_visits(p, points_dict)
+                            last_point = p
+                        elif seg.direction == 4:
+                            p = Point(last_point.x-1, last_point.y)
+                            increase_visits(p, points_dict)
+                            last_point = p
+            increase_visits(path.link.end_point, points_dict)
 
         counter = 0
         for key, value in points_dict.items():
@@ -62,9 +92,8 @@ class Fitness:
 
         self.crosses = counter
 
-    def count_fitness(self, length_weight=2, segments_weight=1, cross_weight=50):
-        self.count_crosses()
-        return self.segments_amount*segments_weight + self.full_length*length_weight + self.crosses*cross_weight
+    def count_fitness(self):
+        return self.segments_amount*ap.SEGMENTS_WEIGHT + self.full_length*ap.LENGTH_WEIGHT + self.crosses*ap.CROSS_WEIGHT
 
     def get_info(self):
         return [self.full_length, self.segments_amount, self.crosses]

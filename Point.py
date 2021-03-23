@@ -18,7 +18,7 @@ class Point:
 
     @y.setter
     def y(self, y):
-        self.__x = y
+        self.__y = y
 
     def __eq__(self, other):
         if isinstance(other, Point):
