@@ -88,13 +88,12 @@ class Generator:
                 if random_number < ap.PROPER_DIRECTION_PROBABILITY:
                     direction = proper_direction(single_path, last_point, last_direction)
                     actual_point = move(last_point, direction)
-                    print("jestem tu")
+
                 else:
                     while not (valid_direction(direction, last_direction) and self.individual.pcb.check_point_on_board(actual_point)): #NAND
                         # until direction is valid (dont go back) and point is on a board
                         direction = random_direction()
                         actual_point = move(last_point, direction)  # nearby point
-                        print("albo tu")
 
                 if direction != last_direction and last_direction != 0:  # if direction changes
                     single_path.add_segment(Segment(last_point, direction, actual_point, 1))  # add new segment

@@ -64,9 +64,10 @@ class PCBPrinter:
         fitness = fit.count_fitness()
         ind_info = fit.get_info()
 
-        plt.figtext(0.5, 0.01, 'Length: ' + str(ind_info[0]) + '   Segments: '
+        plt.figtext(0.2, 0, 'Length: ' + str(ind_info[0]) + '   Segments: '
                     + str(ind_info[1]) + '   Crosses: ' + str(ind_info[2])
-                    + '   Fitness: ' + str(fitness), ha='center')
+                    + '   Fitness: ' + str(fitness) + '\nPaths out of board: ' + str(ind_info[3]) + ' Length out of board: ' + str(ind_info[4]))
+
         plt.grid()
         plt.draw()
         plt.waitforbuttonpress(0)
