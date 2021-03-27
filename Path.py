@@ -1,5 +1,4 @@
-import copy
-
+import pickle
 from Point import Point
 from Segment import Segment
 
@@ -64,37 +63,34 @@ class Path:
         #jeśli kolejny jest ostatnim
         if len(self.segments)-1 == n+1:
             # dodaje nowy który dotrze w jego miejsce
-            self.add_segment(Segment(copy.deepcopy(seg_next_1.end_point), get_opposite_direction(seg.direction), copy.deepcopy(self.link.end_point), 1))
+            self.add_segment(Segment(pickle.loads(pickle.dumps(seg_next_1.end_point)), get_opposite_direction(seg.direction), pickle.loads(pickle.dumps(self.link.end_point)), 1))
 
         else:
             #print(self.segments)
             seg_next_2 = self.segments[n+2]
-            #jak trzeci ma ten sam kierunek
+            # third has same direction
             if seg_next_2.direction == seg.direction:
                 if seg_next_2.length > 1:
-                    #skracanie
+                    # shortening
                     seg_next_2.shorten_segment_back()
                 elif seg_next_2 == self.segments[-1]:
-                    #usuwanie
+                    # delete
                     self.segments.remove(seg_next_2)
                 else:
-                    #łaczenie
-
+                    # connect
                     if self.segments[n+3].direction == seg_next_1.direction:
-                        self.segments[n+3].start_point = copy.deepcopy(seg_next_1.start_point)
+                        self.segments[n+3].start_point = pickle.loads(pickle.dumps(seg_next_1.start_point))
                         self.segments[n + 3].length += seg_next_1.length
                         self.segments.remove(seg_next_1)
                         self.segments.remove(seg_next_2)
                     else:
-                        #odwrócenie zmian, jak idzie na nas
+                        # reverse changes if it makes a loop
                         seg_next_1.move_segment_shortening(seg)
                         seg.shorten_segment()
-            #trzeci ma inny kierunek
-
+            # third has different direction
             else:
-                #wydłuzyc
+                # lengthening
                 seg_next_2.lengthen_segment_back()
-
 
     def shortening_segment(self, n):
         seg = self.segments[n]
@@ -102,32 +98,32 @@ class Path:
         seg_next_1 = self.segments[n + 1]
         seg_next_1.move_segment_shortening(seg)
 
-        # jesli kolejny jest ostatnim
+        # if next is the last one
         if len(self.segments)-1 == n+1:
-            # dodaje nowy który dotrze w jego miejsce
-            self.add_segment(Segment(copy.deepcopy(seg_next_1.end_point), seg.direction, copy.deepcopy(self.link.end_point), 1))
+            # add new which gets to its place
+            self.add_segment(Segment(pickle.loads(pickle.dumps(seg_next_1.end_point)), seg.direction, pickle.loads(pickle.dumps(self.link.end_point)), 1))
         else:
             seg_next_2 = self.segments[n+2]
-            # trzeci w innym kierunku
+            # third has different direction
             if seg_next_2.direction != seg.direction:
                 if seg_next_2.length > 1:
-                    #skracanie
+                    # shortening
                     seg_next_2.shorten_segment_back()
                 elif seg_next_2 == self.segments[-1]:
-                    #usuwanie
+                    # delete
                     self.segments.remove(seg_next_2)
                 else:
-                    #laczenie
+                    # connect
                     if self.segments[n + 3].direction == seg_next_1.direction:
-                        self.segments[n + 3].start_point = copy.deepcopy(seg_next_1.start_point)
+                        self.segments[n + 3].start_point = pickle.loads(pickle.dumps(seg_next_1.start_point))
                         self.segments[n + 3].length += seg_next_1.length
                         self.segments.remove(seg_next_1)
                         self.segments.remove(seg_next_2)
                     else:
-                        #odwrócenie zmian, jak idzie na nas
+                        # reverse changes if it makes a loop
                         seg_next_1.move_segment_lengthening(seg)
                         seg.lengthen_segment()
-            # trzeci w tym samym kierunku
+            # third has same direction
             else:
                 seg_next_2.lengthen_segment_back()
 

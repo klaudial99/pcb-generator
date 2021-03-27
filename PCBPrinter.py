@@ -28,7 +28,7 @@ class PCBPrinter:
     def pcb(self, pcb):
         self.__pcb = pcb
 
-    def draw_plot(self, best_individual):
+    def draw_plot(self, individual):
         plt.clf()
         # FRAME
         x_frame = np.array([0, 0, self.pcb.width, self.pcb.width, 0])
@@ -39,8 +39,7 @@ class PCBPrinter:
         title_font = {'family': 'serif', 'size': 16}
         plt.title("BEST INDIVIDUAL", fontdict=title_font)
 
-
-        for path in best_individual.paths:
+        for path in individual.paths:
 
             rand_color = "#%06x" % random.randint(0, 0xFFFFFF)
 
@@ -60,17 +59,14 @@ class PCBPrinter:
 
             plt.plot(x_segments, y_segments, color=rand_color)
 
-        fit = Fitness(best_individual)
+        fit = Fitness(individual)
         fitness = fit.count_fitness()
         ind_info = fit.get_info()
 
         plt.figtext(0.2, 0, 'Length: ' + str(ind_info[0]) + '   Segments: '
                     + str(ind_info[1]) + '   Crosses: ' + str(ind_info[2])
-                    + '   Fitness: ' + str(fitness) + '\nPaths out of board: ' + str(ind_info[3]) + ' Length out of board: ' + str(ind_info[4]))
+                    + '   Fitness: ' + str(fitness) + '\nPaths out of board: ' + str(ind_info[3]) + '   Length out of board: ' + str(ind_info[4]))
 
         plt.grid()
         plt.draw()
         plt.waitforbuttonpress(0)
-
-
-

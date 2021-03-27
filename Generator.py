@@ -1,4 +1,3 @@
-import random
 from Point import Point
 from Segment import Segment
 import random
@@ -58,7 +57,6 @@ def proper_direction(path, actual_point, prev_direction):
             return 3
 
 
-
 class Generator:
 
     def __init__(self, individual):
@@ -109,6 +107,3 @@ class Generator:
                 last_direction = direction
                 last_point = actual_point
             #print("ALL: " + str(i))
-
-
-

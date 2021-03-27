@@ -48,7 +48,7 @@ class Segment:
             self.end_point = point
 
     def lengthen_segment(self):
-        # określanie nowego punktu końcowego
+        # determine new end point
         if self.direction == 1:
             #self.end_point.y += 1
             self.end_point = Point(self.end_point.x, self.end_point.y+1)
@@ -65,7 +65,7 @@ class Segment:
 
 
     def shorten_segment(self):
-        # określanie nowego punktu końcowego
+        # determine new end point
         if self.direction == 1:
             self.end_point = Point(self.end_point.x, self.end_point.y - 1)
         elif self.direction == 2:
@@ -78,7 +78,7 @@ class Segment:
         self.length -= 1
 
     def lengthen_segment_back(self):
-        # określanie nowego punktu początkowego
+        # determine new start point
         if self.direction == 1:
             self.start_point = Point(self.start_point.x, self.start_point.y - 1)
         elif self.direction == 2:
@@ -91,7 +91,7 @@ class Segment:
         self.length += 1
 
     def shorten_segment_back(self):
-        # określanie nowego punktu początkowego
+        # determine new start point
         if self.direction == 1:
             self.start_point = Point(self.start_point.x, self.start_point.y + 1)
         elif self.direction == 2:
@@ -104,7 +104,7 @@ class Segment:
         self.length -= 1
 
     def move_segment_lengthening(self, prev_segment):
-        # określenie kierunku przesunięcia
+        # determine direction of moving
         if prev_segment.direction == 1:
             self.start_point = Point(self.start_point.x, self.start_point.y+1)
             self.end_point = Point(self.end_point.x, self.end_point.y+1)
@@ -119,7 +119,7 @@ class Segment:
             self.end_point = Point(self.end_point.x-1, self.end_point.y)
 
     def move_segment_shortening(self, prev_segment):
-        # określenie kierunku przesunięcia
+        # determine direction of moving
         if prev_segment.direction == 1:
             self.start_point = Point(self.start_point.x, self.start_point.y - 1)
             self.end_point = Point(self.end_point.x, self.end_point.y - 1)

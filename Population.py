@@ -1,6 +1,5 @@
 from Fitness import Fitness
 from Individual import Individual
-import numpy as np
 
 
 class Population:
@@ -37,11 +36,11 @@ class Population:
     def individuals(self, individuals_list):
         self.__individuals = individuals_list
 
-    def best_and_avergae_fitness_in_population(self):
+    def best_worst_fitness_in_population(self):
         fitness = []
         for ind in self.individuals:
             fit = Fitness(ind)
             fitness.append(fit.count_fitness())
-        print("AVERAGE: " + str(np.average(fitness)))
+        #print("AVERAGE: " + str(np.average(fitness)))
 
-        return self.individuals[min(range(len(fitness)), key=fitness.__getitem__)]
+        return min(fitness), max(fitness), self.individuals[min(range(len(fitness)), key=fitness.__getitem__)], self.individuals[min(range(len(fitness)), key=fitness.__getitem__)]

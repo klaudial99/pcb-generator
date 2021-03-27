@@ -1,6 +1,5 @@
+import pickle
 import random
-import copy
-from PCBPrinter import PCBPrinter
 from Fitness import Fitness
 import AlgorithmParameters as ap
 from Individual import Individual
@@ -12,10 +11,10 @@ def selection_tournament(population):
     selected_indexes = []
 
     # take all individuals if population is too small
-    if ap.TOURNAMENT_N >= len(population.individuals):
+    if ap.TOURNAMENT_N*len(population.individuals) >= len(population.individuals):
         selected_individuals = population.individuals
     else:
-        while len(selected_individuals) < ap.TOURNAMENT_N:
+        while len(selected_individuals) < ap.TOURNAMENT_N*len(population.individuals):
 
             # get random index which wasn't used
             while True:
@@ -36,7 +35,7 @@ def selection_tournament(population):
     # get index of smallest fitness
     index_min = min(range(len(fitness)), key=fitness.__getitem__)
     fit = Fitness(selected_individuals[index_min])
-    print("Tournament - selected fitness:", fit.count_fitness())
+    #print("Tournament - selected fitness:", fit.count_fitness())
 
     return selected_individuals[index_min]
 
@@ -60,14 +59,14 @@ def selection_roulette(population):
 
     # finding individual related to random number
     roulette_sum = 0
-    print("SUM", sum(odds))
+    #print("SUM", sum(odds))
     for x in range(len(odds)):
         roulette_sum += odds[x]
-        print("sum", roulette_sum)
+        #print("sum", roulette_sum)
         if random_number <= roulette_sum:
-            print("random", random_number)
+            #print("random", random_number)
             fit = Fitness(population.individuals[x])
-            print("Roulette - selected fitness:", fit.count_fitness())
+            #print("Roulette - selected fitness:", fit.count_fitness())
             return population.individuals[x]
 
 
@@ -93,14 +92,12 @@ def crossover(ind1, ind2):
             gene_change_odds = random.randint(0, 100)
             # swap genes, deep copy - to avoid changing the parent
             if gene_change_odds < ap.GENE_CHANGE_PROBABILITY:
-                paths_child_1.append(copy.deepcopy(ind2.paths[x]))
-                paths_child_2.append(copy.deepcopy(ind1.paths[x]))
+                paths_child_1.append(pickle.loads(pickle.dumps(ind2.paths[x])))
+                paths_child_2.append(pickle.loads(pickle.dumps(ind1.paths[x])))
             # else original genes
             else:
-                paths_child_1.append(copy.deepcopy(ind1.paths[x]))
-                paths_child_2.append(copy.deepcopy(ind2.paths[x]))
-
-
+                paths_child_1.append(pickle.loads(pickle.dumps(ind1.paths[x])))
+                paths_child_2.append(pickle.loads(pickle.dumps(ind2.paths[x])))
 
         # new children
         child_1 = Individual(ind1.pcb)
@@ -113,20 +110,21 @@ def crossover(ind1, ind2):
 
 
 def mutation(individual, is_ref):
-    # kopia jeśli nie było
+    # copy if ind is a referencw
     if is_ref:
-        ind = copy.deepcopy(individual)
+        ind = pickle.loads(pickle.dumps(individual))
+
     else:
         ind = individual
     for path in ind.paths:
         if len(path.segments) > 1:
             mutation_odds = random.randint(0, 100)
             if mutation_odds < ap.MUTATION_PROBABILITY:
-                # losowanie segmentu do mutacji
+                # get random segment for mutation
                 segment = random.randint(0, len(path.segments) - 2)
-                # jak jest dłuższy niż jeden to losujemy czy wydłużać czy skracać
+                # if longer than 1, draw lengthening or shortening
                 if path.segments[segment].length > 1:
-                    operation = random.randint(0, 1)  # 0=skrócenie, 1=wydłużenie
+                    operation = random.randint(0, 1)  # 0 = shortening, 1 = lengthening
                 else:
                     operation = 1
 

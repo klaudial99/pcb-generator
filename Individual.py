@@ -52,9 +52,5 @@ class Individual:
                 print(path)
                 raise Exception("LAST SAME")
 
-
     def __repr__(self):
         return "PCB: " + str(self.pcb) + "\n" + str(self.paths)
-
-
-
